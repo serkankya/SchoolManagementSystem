@@ -15,7 +15,7 @@ namespace SchoolManagementSystem
 {
 	public partial class frmMain : Form
 	{
-		int _userID, _roleID;
+		int _userID, _roleID; //roleID ile kontroller yapılacak
 		public frmMain()
 		{
 			InitializeComponent();
@@ -52,7 +52,7 @@ namespace SchoolManagementSystem
 
 		private void timer_Tick(object sender, EventArgs e)
 		{
-			lblDate.Text = CallTimer.Start();
+			lblDate.Text = CallTimer.Start(); //Eklenecek
 		}
 
 		private void frmMain_Load(object sender, EventArgs e)
