@@ -34,6 +34,7 @@
 			this.lblRole = new System.Windows.Forms.Label();
 			this.timer = new System.Windows.Forms.Timer(this.components);
 			this.lblDate = new System.Windows.Forms.Label();
+			this.btnStudentManagement = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// lblUser
@@ -67,11 +68,22 @@
 			this.lblDate.TabIndex = 2;
 			this.lblDate.Text = "label1";
 			// 
+			// btnStudentManagement
+			// 
+			this.btnStudentManagement.Location = new System.Drawing.Point(245, 131);
+			this.btnStudentManagement.Name = "btnStudentManagement";
+			this.btnStudentManagement.Size = new System.Drawing.Size(100, 41);
+			this.btnStudentManagement.TabIndex = 3;
+			this.btnStudentManagement.Text = "Öğrenci Yönetimi";
+			this.btnStudentManagement.UseVisualStyleBackColor = true;
+			this.btnStudentManagement.Click += new System.EventHandler(this.btnStudentManagement_Click);
+			// 
 			// frmMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1134, 661);
+			this.Controls.Add(this.btnStudentManagement);
 			this.Controls.Add(this.lblDate);
 			this.Controls.Add(this.lblRole);
 			this.Controls.Add(this.lblUser);
@@ -91,5 +103,6 @@
 		private System.Windows.Forms.Label lblRole;
 		private System.Windows.Forms.Timer timer;
 		private System.Windows.Forms.Label lblDate;
+		private System.Windows.Forms.Button btnStudentManagement;
 	}
 }

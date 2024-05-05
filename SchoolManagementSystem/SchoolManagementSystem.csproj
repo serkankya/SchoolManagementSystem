@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="CallTimer.cs" />
     <Compile Include="Connection.cs" />
+    <Compile Include="CreateIdentityNumber.cs" />
     <Compile Include="frmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +65,18 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmStudentManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStudentManagement.Designer.cs">
+      <DependentUpon>frmStudentManagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmStudentRegistration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStudentRegistration.Designer.cs">
+      <DependentUpon>frmStudentRegistration.cs</DependentUpon>
+    </Compile>
     <Compile Include="KeepSession.cs" />
     <Compile Include="PasswordHasher.cs" />
     <Compile Include="Program.cs" />
@@ -73,6 +86,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStudentManagement.resx">
+      <DependentUpon>frmStudentManagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStudentRegistration.resx">
+      <DependentUpon>frmStudentRegistration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

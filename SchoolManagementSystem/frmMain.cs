@@ -50,9 +50,55 @@ namespace SchoolManagementSystem
 			}
 		}
 
+		void CheckUserRole()
+		{
+			if(_roleID != -1)
+			{
+				switch (_roleID)
+				{
+					case 1:
+						{
+							//STMT - Müdür
+							break;
+						}
+					case 2:
+						{
+							//STMT - Müdür Yardımcısı
+							break;
+						}
+					case 3:
+						{
+							//STMT - Memur
+							break;
+						}
+					case 4:
+						{
+							//STMT - Öğretmen
+							break;
+						}
+					case 5:
+						{
+							//STMT - Psk Danışman
+							break;
+						}
+				}
+			}
+			else
+			{
+				//Hata durumunda gerçekleşecekler eklenecek
+			}
+		}
+
 		private void timer_Tick(object sender, EventArgs e)
 		{
 			lblDate.Text = CallTimer.Start(); //Eklenecek
+		}
+
+		private void btnStudentManagement_Click(object sender, EventArgs e)
+		{
+			frmStudentManagement frmStudentManagement = new frmStudentManagement();
+			frmStudentManagement.Show();
+			this.Hide();
 		}
 
 		private void frmMain_Load(object sender, EventArgs e)
