@@ -33,8 +33,8 @@
 			this.rbFemale = new System.Windows.Forms.RadioButton();
 			this.rbMale = new System.Windows.Forms.RadioButton();
 			this.dtStudentBirthDate = new System.Windows.Forms.DateTimePicker();
-			this.txtStudentDistrict = new System.Windows.Forms.ComboBox();
-			this.txtStudentCity = new System.Windows.Forms.ComboBox();
+			this.cmbDistricts = new System.Windows.Forms.ComboBox();
+			this.cmbCities = new System.Windows.Forms.ComboBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
@@ -80,8 +80,8 @@
 			this.grpStudentData.Controls.Add(this.rbFemale);
 			this.grpStudentData.Controls.Add(this.rbMale);
 			this.grpStudentData.Controls.Add(this.dtStudentBirthDate);
-			this.grpStudentData.Controls.Add(this.txtStudentDistrict);
-			this.grpStudentData.Controls.Add(this.txtStudentCity);
+			this.grpStudentData.Controls.Add(this.cmbDistricts);
+			this.grpStudentData.Controls.Add(this.cmbCities);
 			this.grpStudentData.Controls.Add(this.label6);
 			this.grpStudentData.Controls.Add(this.label5);
 			this.grpStudentData.Controls.Add(this.label4);
@@ -129,21 +129,22 @@
 			this.dtStudentBirthDate.Size = new System.Drawing.Size(234, 24);
 			this.dtStudentBirthDate.TabIndex = 5;
 			// 
-			// txtStudentDistrict
+			// cmbDistricts
 			// 
-			this.txtStudentDistrict.FormattingEnabled = true;
-			this.txtStudentDistrict.Location = new System.Drawing.Point(114, 176);
-			this.txtStudentDistrict.Name = "txtStudentDistrict";
-			this.txtStudentDistrict.Size = new System.Drawing.Size(234, 26);
-			this.txtStudentDistrict.TabIndex = 4;
+			this.cmbDistricts.FormattingEnabled = true;
+			this.cmbDistricts.Location = new System.Drawing.Point(114, 176);
+			this.cmbDistricts.Name = "cmbDistricts";
+			this.cmbDistricts.Size = new System.Drawing.Size(234, 26);
+			this.cmbDistricts.TabIndex = 4;
 			// 
-			// txtStudentCity
+			// cmbCities
 			// 
-			this.txtStudentCity.FormattingEnabled = true;
-			this.txtStudentCity.Location = new System.Drawing.Point(114, 140);
-			this.txtStudentCity.Name = "txtStudentCity";
-			this.txtStudentCity.Size = new System.Drawing.Size(234, 26);
-			this.txtStudentCity.TabIndex = 4;
+			this.cmbCities.FormattingEnabled = true;
+			this.cmbCities.Location = new System.Drawing.Point(114, 140);
+			this.cmbCities.Name = "cmbCities";
+			this.cmbCities.Size = new System.Drawing.Size(234, 26);
+			this.cmbCities.TabIndex = 4;
+			this.cmbCities.SelectedIndexChanged += new System.EventHandler(this.cmbCities_SelectedIndexChanged);
 			// 
 			// label6
 			// 
@@ -403,6 +404,7 @@
 			this.cmbClass.Name = "cmbClass";
 			this.cmbClass.Size = new System.Drawing.Size(234, 26);
 			this.cmbClass.TabIndex = 4;
+			this.cmbClass.SelectedIndexChanged += new System.EventHandler(this.cmbClass_SelectedIndexChanged);
 			// 
 			// label14
 			// 
@@ -480,6 +482,7 @@
 			this.Name = "frmStudentRegistration";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "OYS - Öğrenci Kayıt";
+			this.Load += new System.EventHandler(this.frmStudentRegistration_Load);
 			this.grpStudentData.ResumeLayout(false);
 			this.grpStudentData.PerformLayout();
 			this.grpFamilyData.ResumeLayout(false);
@@ -495,8 +498,8 @@
 
 		private System.Windows.Forms.GroupBox grpStudentData;
 		private System.Windows.Forms.DateTimePicker dtStudentBirthDate;
-		private System.Windows.Forms.ComboBox txtStudentDistrict;
-		private System.Windows.Forms.ComboBox txtStudentCity;
+		private System.Windows.Forms.ComboBox cmbDistricts;
+		private System.Windows.Forms.ComboBox cmbCities;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label4;
