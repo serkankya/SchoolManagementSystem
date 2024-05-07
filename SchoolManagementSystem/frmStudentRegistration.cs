@@ -262,6 +262,27 @@ namespace SchoolManagementSystem
 			}
 		}
 
+		private void ClearInputs()
+		{
+			List<GroupBox> groupBoxes = new List<GroupBox>
+			{
+				grpStudentData, grpSchoolData, grpFamilyData
+			};
+
+			foreach (GroupBox groupBox in groupBoxes)
+			{
+				foreach (Control item in groupBox.Controls)
+				{
+					if(item is TextBox)
+					{
+						item.Text = string.Empty;
+					}
+				}
+			}
+
+			txtAddress.Text = string.Empty;
+		}
+
 		public void ListClasses()
 		{
 			Dictionary<int, string> classes = new Dictionary<int, string>();
@@ -318,6 +339,28 @@ namespace SchoolManagementSystem
 			else
 			{
 				MessageBox.Show("Bir hata oluştu. Lütfen tekrar şehir seçimi yapınız.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+
+		private void btnCancel_Click(object sender, EventArgs e)
+		{
+			DialogResult res = MessageBox.Show("Kayıt işlemini iptal etmek istediğinize emin misiniz ?", "Uyarı", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (res == DialogResult.Yes)
+			{
+				ClearInputs(); 
+				frmStudentRegistration_Load(sender, e); //İşlemleri tekrarla
+				MessageBox.Show("İşleminiz iptal edildi.","Bilgi",MessageBoxButtons.OK,MessageBoxIcon.Information);
+			}
+		}
+
+		private void btnMainForm_Click(object sender, EventArgs e)
+		{
+			DialogResult res = MessageBox.Show("İşlemi iptal edip ana sayfaya dönmek istediğinizden emin misiniz ?", "Uyarı", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (res == DialogResult.Yes)
+			{
+				frmMain main = new frmMain();
+				main.Show();
+				this.Hide();
 			}
 		}
 

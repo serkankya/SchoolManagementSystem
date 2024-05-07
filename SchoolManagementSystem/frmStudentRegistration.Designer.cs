@@ -252,11 +252,11 @@
 			this.grpFamilyData.TabStop = false;
 			this.grpFamilyData.Text = "AİLE BİLGİLERİ";
 			// 
-			// richTextBox1
+			// txtAddress
 			// 
 			this.txtAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txtAddress.Location = new System.Drawing.Point(114, 212);
-			this.txtAddress.Name = "richTextBox1";
+			this.txtAddress.Name = "txtAddress";
 			this.txtAddress.Size = new System.Drawing.Size(234, 100);
 			this.txtAddress.TabIndex = 16;
 			this.txtAddress.Text = "";
@@ -444,6 +444,7 @@
 			this.btnCancel.TabIndex = 3;
 			this.btnCancel.Text = "İptal Et";
 			this.btnCancel.UseVisualStyleBackColor = true;
+			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 			// 
 			// pbLogo
 			// 
@@ -464,6 +465,7 @@
 			this.btnMainForm.TabIndex = 5;
 			this.btnMainForm.Text = "Ana Menü";
 			this.btnMainForm.UseVisualStyleBackColor = true;
+			this.btnMainForm.Click += new System.EventHandler(this.btnMainForm_Click);
 			// 
 			// frmStudentRegistration
 			// 
