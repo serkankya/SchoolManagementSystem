@@ -14,9 +14,12 @@ namespace SchoolManagementSystem
 {
 	public partial class frmStudentRegistration : Form
 	{
+		int _userID, _roleID;
 		public frmStudentRegistration()
 		{
 			InitializeComponent();
+			_userID = KeepSession.UserID;
+			_roleID = KeepSession.RoleID;
 		}
 
 		public bool InputChecker() //Veri ekleme sırasında herhangi bir boş alan var mı kontrolü yapılacak
@@ -38,7 +41,7 @@ namespace SchoolManagementSystem
 					{
 						return true; //Eğer seçilmemiş ise hatalı dönecek
 					}
-					else if (control is RadioButton radioButton && !radioButton.Checked)
+					else if (!rbFemale.Checked || !rbMale.Checked)
 					{
 						return true; //Eğer seçilmemiş ise hatalı dönecek
 					}
@@ -75,23 +78,22 @@ namespace SchoolManagementSystem
 					}
 				}
 
-				foreach (var city in cities)
-				{
-					cmbCities.Items.Add(new KeyValuePair<int, string>(city.Key, city.Value));
-				}
+				//foreach (var city in cities)
+				//{
+				//	cmbCities.Items.Add(new KeyValuePair<int, string>(city.Key, city.Value));
+				//}
 
 				cmbCities.Text = "Lütfen şehir seçiniz...";
 
 				cmbCities.DisplayMember = "Value";
 				cmbCities.ValueMember = "Key";
 
-
+				cmbCities.DataSource = cities.ToList();
 			}
 		}
 
 		public void ListDistricts(int cityID)
 		{
-			cmbDistricts.Items.Clear();
 			cmbDistricts.Enabled = true;
 
 			Dictionary<int, string> districts = new Dictionary<int, string>();
@@ -104,8 +106,6 @@ namespace SchoolManagementSystem
 				{
 					commandDistrict.Parameters.AddWithValue("@cityID", cityID);
 
-					commandDistrict.ExecuteNonQuery();
-
 					using (SqlDataReader dataReader = commandDistrict.ExecuteReader())
 					{
 						while (dataReader.Read())
@@ -117,15 +117,17 @@ namespace SchoolManagementSystem
 					}
 				}
 
-				foreach (var district in districts)
-				{
-					cmbDistricts.Items.Add(new KeyValuePair<int, string>(district.Key, district.Value));
-				}
+				//foreach (var district in districts)
+				//{
+				//	cmbDistricts.Items.Add(new KeyValuePair<int, string>(district.Key, district.Value));
+				//}
 
 				cmbDistricts.Text = "Lütfen ilçe seçiniz...";
 
 				cmbDistricts.DisplayMember = "Value";
 				cmbDistricts.ValueMember = "Key";
+
+				cmbDistricts.DataSource = districts.ToList();
 			}
 		}
 
@@ -133,55 +135,15 @@ namespace SchoolManagementSystem
 		{
 			if (InputChecker())
 			{
-				using (SqlConnection connection = Connection.Connect())
+				try
 				{
-					connection.Open();
-					SqlTransaction sqlTransaction = connection.BeginTransaction(); //Toplu bir işlem gerçekleştireceğim için(student ve family bilgilerinin eklenmesi) transaction kullanıyorum
-
-					try
-					{
-						string queryForStudentInsert = "INSERT INTO Students VALUES(@classID,@branchID,@cityID,@districtID,@insertedByID,@studentName,@studentSurname,@identityNumber,@birthDate,@gender,@address)";
-
-						using (SqlCommand studentCommand = new SqlCommand(queryForStudentInsert, connection, sqlTransaction))
-						{
-							//studentCommand.Parameters.AddWithValue("@classID",);
-							//studentCommand.Parameters.AddWithValue("@branchID",);
-							//studentCommand.Parameters.AddWithValue("@cityID",);
-							//studentCommand.Parameters.AddWithValue("@districtID",);
-							//studentCommand.Parameters.AddWithValue("@insertedByID",);
-							//studentCommand.Parameters.AddWithValue("@studentName",);
-							//studentCommand.Parameters.AddWithValue("@studentSurname",);
-							//studentCommand.Parameters.AddWithValue("@identityNumber",);
-							//studentCommand.Parameters.AddWithValue("@birthDate",);
-							//studentCommand.Parameters.AddWithValue("@gender",);
-							//studentCommand.Parameters.AddWithValue("@address",);
-
-							int insertedStudentID = Convert.ToInt32(studentCommand.ExecuteScalar()); //Son eklenen öğrencinin ID'sini alıyorum. Ayrıca execute işlemi de burada.
-
-							studentCommand.ExecuteNonQuery();
-
-							string queryForFamilyInsert = "INSERT INTO Families VALUES (@studentID,@motherName,@motherSurname,@motherMaidenName,@fatherName,@fatherSurname)";
-
-							using (SqlCommand familyCommand = new SqlCommand(queryForFamilyInsert, connection, sqlTransaction))
-							{
-								//familyCommand.Parameters.AddWithValue("@studentID",);
-								//familyCommand.Parameters.AddWithValue("@motherName",);
-								//familyCommand.Parameters.AddWithValue("@motherSurname",);
-								//familyCommand.Parameters.AddWithValue("@motherMaidenName",);
-								//familyCommand.Parameters.AddWithValue("@fatherName",);
-								//familyCommand.Parameters.AddWithValue("@fatherSurname",);
-
-								familyCommand.ExecuteNonQuery();
-
-								sqlTransaction.Commit(); //İşlem tamamlandı.
-							}
-						}
-					}
-					catch (Exception exception)
-					{
-						MessageBox.Show("Bir hata oluştu. Hata :\n ", exception.Message);
-						sqlTransaction.Rollback(); //Herhangi bir hata olması durumunda işlemleri geri alıyorum.
-					}
+					InsertStudents();
+					InsertFamilies();
+					MessageBox.Show("Öğrenci bilgileri başarıyla eklendi!","Bilgi",MessageBoxButtons.OK,MessageBoxIcon.Information);
+				}
+				catch (Exception exception)
+				{
+					MessageBox.Show("Bir hata oluştu. Hata :\n ", exception.Message);
 				}
 			}
 			else
@@ -190,9 +152,91 @@ namespace SchoolManagementSystem
 			}
 		}
 
+		public void InsertStudents()
+		{
+			using (SqlConnection connection = Connection.Connect())
+			{
+				connection.Open();
+
+				CreateIdentityNumber createIdentityNumber = new CreateIdentityNumber();
+				string studentNumber = createIdentityNumber.CreateStudentNumber(dtStudentBirthDate.Value, Convert.ToInt32(cmbBranch.SelectedValue));
+
+				string queryForStudentInsert = "INSERT INTO Students (ClassID,BranchID,CityID,DistrictID,InsertedByID,StudentNumber,StudentName,StudentSurname,IdentityNumber,BirthDate,Gender,Address) " +
+					"VALUES (@classID,@branchID,@cityID,@districtID,@insertedByID,@studentNumber,@studentName,@studentSurname,@identityNumber,@birthDate,@gender,@address)";
+
+				using (SqlCommand studentCommand = new SqlCommand(queryForStudentInsert, connection))
+				{
+					bool gender;
+
+					if (rbFemale.Checked)
+					{
+						gender = true;
+					}
+					else
+					{
+						gender = false;
+					}
+
+					studentCommand.Parameters.AddWithValue("@classID", Convert.ToInt32(cmbClass.SelectedValue));
+					studentCommand.Parameters.AddWithValue("@branchID", Convert.ToInt32(cmbBranch.SelectedValue));
+					studentCommand.Parameters.AddWithValue("@cityID", Convert.ToInt32(cmbCities.SelectedValue));
+					studentCommand.Parameters.AddWithValue("@districtID", Convert.ToInt32(cmbDistricts.SelectedValue));
+					studentCommand.Parameters.AddWithValue("@insertedByID", Convert.ToInt32(_userID));
+					studentCommand.Parameters.AddWithValue("@studentNumber", studentNumber);
+					studentCommand.Parameters.AddWithValue("@studentName", txtStudentName.Text);
+					studentCommand.Parameters.AddWithValue("@studentSurname", txtStudentSurname.Text);
+					studentCommand.Parameters.AddWithValue("@identityNumber", txtStudentIdentityNumber.Text.ToString());
+					studentCommand.Parameters.AddWithValue("@birthDate", Convert.ToDateTime(dtStudentBirthDate.Value));
+					studentCommand.Parameters.AddWithValue("@gender", gender);
+					studentCommand.Parameters.AddWithValue("@address", txtAddress.Text);
+
+					studentCommand.ExecuteNonQuery();
+				}
+			}
+		}
+
+		public void InsertFamilies()
+		{
+			using (SqlConnection connection = Connection.Connect())
+			{
+				connection.Open();
+
+				string queryForStudentID = "SELECT TOP 1 StudentID FROM Students ORDER BY StudentID DESC";
+				int latestStudentID = 0;
+
+				using (SqlCommand command = new SqlCommand(queryForStudentID, connection))
+				{
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						if (reader.Read())
+						{
+							latestStudentID = Convert.ToInt32(reader["StudentID"]);
+						}
+						else
+						{
+							MessageBox.Show("Öğrenci ekleme işlemi başarısız! Lütfen tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						}
+					}
+				}
+
+				string queryForFamilyInsert = "INSERT INTO Families (StudentID,MotherName,MotherSurname,MotherMaidenName,FatherName,FatherSurname) VALUES (@studentID,@motherName,@motherSurname,@motherMaidenName,@fatherName,@fatherSurname)";
+
+				using (SqlCommand familyCommand = new SqlCommand(queryForFamilyInsert, connection))
+				{
+					familyCommand.Parameters.AddWithValue("@studentID", latestStudentID);
+					familyCommand.Parameters.AddWithValue("@motherName", txtMotherName.Text);
+					familyCommand.Parameters.AddWithValue("@motherSurname", txtMotherSurname.Text);
+					familyCommand.Parameters.AddWithValue("@motherMaidenName", txtMaidenName.Text);
+					familyCommand.Parameters.AddWithValue("@fatherName", txtFatherName.Text);
+					familyCommand.Parameters.AddWithValue("@fatherSurname", txtFatherSurname.Text);
+
+					familyCommand.ExecuteNonQuery();
+				}
+			}
+		}
+
 		public void ListBranches(int classID)
 		{
-			cmbBranch.Items.Clear();
 			cmbBranch.Enabled = true;
 
 			Dictionary<int, string> branches = new Dictionary<int, string>();
@@ -203,11 +247,9 @@ namespace SchoolManagementSystem
 
 				string queryForBranches = "SELECT * FROM Branches WHERE ClassID = @classID";
 
-				using (SqlCommand command = new SqlCommand(queryForBranches,connection))
+				using (SqlCommand command = new SqlCommand(queryForBranches, connection))
 				{
 					command.Parameters.AddWithValue("@classID", classID);
-
-					command.ExecuteNonQuery();
 
 					using (SqlDataReader dataReader = command.ExecuteReader())
 					{
@@ -221,15 +263,17 @@ namespace SchoolManagementSystem
 					}
 				}
 
-				foreach (var branch in branches)
-				{
-					cmbBranch.Items.Add(new KeyValuePair<int, string>(branch.Key, branch.Value));
-				}
+				//foreach (var branch in branches)
+				//{
+				//	cmbBranch.Items.Add(new KeyValuePair<int, string>(branch.Key, branch.Value));
+				//}
 
 				cmbBranch.Text = "Lütfen şube seçiniz...";
 
 				cmbBranch.DisplayMember = "Value";
 				cmbBranch.ValueMember = "Key";
+
+				cmbBranch.DataSource = branches.ToList();
 			}
 		}
 
@@ -256,15 +300,17 @@ namespace SchoolManagementSystem
 					}
 				}
 
-				foreach (var item in classes)
-				{
-					cmbClass.Items.Add(new KeyValuePair<int,string>(item.Key, item.Value));
-				}
+				//foreach (var item in classes)
+				//{
+				//	cmbClass.Items.Add(new KeyValuePair<int,string>(item.Key, item.Value));
+				//}
 
 				cmbClass.Text = "Lütfen sınıf seçiniz...";
 
 				cmbClass.DisplayMember = "Value";
 				cmbClass.ValueMember = "Key";
+
+				cmbClass.DataSource = classes.ToList();
 			}
 		}
 
@@ -276,6 +322,9 @@ namespace SchoolManagementSystem
 
 			cmbBranch.Enabled = false;
 			cmbBranch.Text = "Lütfen önce sınıfı seçiniz...";
+
+			cmbClass.Text = "Lütfen sınıfı seçiniz...";
+			cmbBranch.Text = "Lütfen şubeyi seçiniz...";
 
 			ListClasses();
 		}

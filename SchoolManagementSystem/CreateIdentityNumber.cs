@@ -12,14 +12,16 @@ namespace SchoolManagementSystem
 		Random _random = new Random();
 
 		#region Öğrenci için gerçekleşen alan
-		public bool CheckStudentNumber()
+		public bool CheckStudentNumber(string studentNumber)
 		{
 			using (SqlConnection connection = Connection.Connect())
 			{
-				string queryForStudentNumber = "SELECT StudentNumber FROM Students WHERE Statement = @statement";
+				connection.Open();
+
+				string queryForStudentNumber = "SELECT StudentNumber FROM Students WHERE StudentNumber = @studentNumber";
 				using (SqlCommand command = new SqlCommand(queryForStudentNumber,connection))
 				{
-					command.Parameters.AddWithValue("@statement", true);
+					command.Parameters.AddWithValue("@studentNumber", studentNumber);
 					command.ExecuteNonQuery();
 
 					using (SqlDataReader dataReader = command.ExecuteReader())
@@ -40,8 +42,8 @@ namespace SchoolManagementSystem
 		public string CreateStudentNumber(DateTime birthYear, int branch)
 		{
 			int randomNumber = _random.Next(1, 300);
-			string finalNumber = birthYear.ToString() + branch.ToString() + randomNumber.ToString();
-			if (CheckStudentNumber())
+			string finalNumber = birthYear.Year.ToString() + branch.ToString() + randomNumber.ToString();
+			if (CheckStudentNumber(finalNumber))
 			{
 				return finalNumber;
 			}

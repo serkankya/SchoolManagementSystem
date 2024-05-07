@@ -46,7 +46,7 @@
 			this.txtStudentName = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.grpFamilyData = new System.Windows.Forms.GroupBox();
-			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+			this.txtAddress = new System.Windows.Forms.RichTextBox();
 			this.txtFatherSurname = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
@@ -232,7 +232,7 @@
 			// 
 			// grpFamilyData
 			// 
-			this.grpFamilyData.Controls.Add(this.richTextBox1);
+			this.grpFamilyData.Controls.Add(this.txtAddress);
 			this.grpFamilyData.Controls.Add(this.txtFatherSurname);
 			this.grpFamilyData.Controls.Add(this.label11);
 			this.grpFamilyData.Controls.Add(this.label10);
@@ -254,12 +254,12 @@
 			// 
 			// richTextBox1
 			// 
-			this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.richTextBox1.Location = new System.Drawing.Point(114, 212);
-			this.richTextBox1.Name = "richTextBox1";
-			this.richTextBox1.Size = new System.Drawing.Size(234, 100);
-			this.richTextBox1.TabIndex = 16;
-			this.richTextBox1.Text = "";
+			this.txtAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtAddress.Location = new System.Drawing.Point(114, 212);
+			this.txtAddress.Name = "richTextBox1";
+			this.txtAddress.Size = new System.Drawing.Size(234, 100);
+			this.txtAddress.TabIndex = 16;
+			this.txtAddress.Text = "";
 			// 
 			// txtFatherSurname
 			// 
@@ -511,7 +511,7 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.GroupBox grpFamilyData;
 		private System.Windows.Forms.GroupBox grpSchoolData;
-		private System.Windows.Forms.RichTextBox richTextBox1;
+		private System.Windows.Forms.RichTextBox txtAddress;
 		private System.Windows.Forms.TextBox txtFatherSurname;
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.Label label10;
