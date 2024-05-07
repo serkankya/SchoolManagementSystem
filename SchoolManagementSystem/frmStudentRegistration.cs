@@ -31,28 +31,28 @@ namespace SchoolManagementSystem
 
 			foreach (GroupBox groupBox in groupBoxes)
 			{
-				foreach (Control control in Controls)
+				foreach (Control control in groupBox.Controls)
 				{
-					if (control is TextBox textBox && string.IsNullOrEmpty(textBox.Text) && string.IsNullOrWhiteSpace(textBox.Text))
+					if (control is TextBox textBox && (string.IsNullOrEmpty(textBox.Text) || string.IsNullOrWhiteSpace(textBox.Text)))
 					{
-						return true; //Eğer boş ise hatalı dönecek
+						return true; // Boş alan varsa hata dönecek
 					}
 					else if (control is ComboBox comboBox && comboBox.SelectedIndex == -1)
 					{
-						return true; //Eğer seçilmemiş ise hatalı dönecek
+						return true; // Seçilmemiş bir ComboBox varsa hata dönecek
 					}
-					else if (!rbFemale.Checked || !rbMale.Checked)
+					else if (!rbFemale.Checked && !rbMale.Checked)
 					{
-						return true; //Eğer seçilmemiş ise hatalı dönecek
+						return true; // Cinsiyet seçilmemişse hata dönecek
 					}
-					else if (control is DateTimePicker dateTimePicker && dateTimePicker.Value == DateTime.Today)
+					else if (control is DateTimePicker dateTimePicker && dateTimePicker.Value.Date == DateTime.Today)
 					{
-						return true; //Eğer veri bugüne aitse hatalı dönecek
+						return true; // Veri bugüne aitse hatalı dönecek
 					}
 				}
 			}
 
-			return false; //Herhangi bir sorun yok ise kayıt işlemi aşamasına geçilebilir.
+			return false; // Herhangi bir sorun yoksa kayıt işlemi aşamasına geçilebilir.
 		}
 
 		public void ListCities()
@@ -77,11 +77,6 @@ namespace SchoolManagementSystem
 						}
 					}
 				}
-
-				//foreach (var city in cities)
-				//{
-				//	cmbCities.Items.Add(new KeyValuePair<int, string>(city.Key, city.Value));
-				//}
 
 				cmbCities.Text = "Lütfen şehir seçiniz...";
 
@@ -117,11 +112,6 @@ namespace SchoolManagementSystem
 					}
 				}
 
-				//foreach (var district in districts)
-				//{
-				//	cmbDistricts.Items.Add(new KeyValuePair<int, string>(district.Key, district.Value));
-				//}
-
 				cmbDistricts.Text = "Lütfen ilçe seçiniz...";
 
 				cmbDistricts.DisplayMember = "Value";
@@ -133,13 +123,13 @@ namespace SchoolManagementSystem
 
 		private void btnCompelete_Click(object sender, EventArgs e)
 		{
-			if (InputChecker())
+			if (!InputChecker())
 			{
 				try
 				{
 					InsertStudents();
 					InsertFamilies();
-					MessageBox.Show("Öğrenci bilgileri başarıyla eklendi!","Bilgi",MessageBoxButtons.OK,MessageBoxIcon.Information);
+					MessageBox.Show("Öğrenci bilgileri başarıyla eklendi!", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 				catch (Exception exception)
 				{
@@ -263,11 +253,6 @@ namespace SchoolManagementSystem
 					}
 				}
 
-				//foreach (var branch in branches)
-				//{
-				//	cmbBranch.Items.Add(new KeyValuePair<int, string>(branch.Key, branch.Value));
-				//}
-
 				cmbBranch.Text = "Lütfen şube seçiniz...";
 
 				cmbBranch.DisplayMember = "Value";
@@ -300,11 +285,6 @@ namespace SchoolManagementSystem
 					}
 				}
 
-				//foreach (var item in classes)
-				//{
-				//	cmbClass.Items.Add(new KeyValuePair<int,string>(item.Key, item.Value));
-				//}
-
 				cmbClass.Text = "Lütfen sınıf seçiniz...";
 
 				cmbClass.DisplayMember = "Value";
@@ -322,9 +302,6 @@ namespace SchoolManagementSystem
 
 			cmbBranch.Enabled = false;
 			cmbBranch.Text = "Lütfen önce sınıfı seçiniz...";
-
-			cmbClass.Text = "Lütfen sınıfı seçiniz...";
-			cmbBranch.Text = "Lütfen şubeyi seçiniz...";
 
 			ListClasses();
 		}
